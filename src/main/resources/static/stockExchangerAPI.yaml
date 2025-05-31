@@ -1,0 +1,118 @@
+openapi: 3.0.1
+info:
+  title: ING Stock Exchange API
+  version: 1.0.0
+servers:
+  - url: /ingx/stock/exchanger/api
+paths:
+  '/createOrder':
+    post:
+      summary: Create a new order
+      tags:
+        - stockExchange
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderReq'
+      responses:
+        '200':
+          description: Created
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/OrderRes'
+  '/listOrder':
+    get:
+      summary: List Order
+      tags:
+        - stockExchange
+      parameters:
+        - name: customer
+          in: header
+          description: customer
+          required: true
+          schema:
+            type: string
+        - name: beginDate
+          in: header
+          description: Begin Date (Format needs to be :ddmmyyyy)
+          required: true
+          schema:
+            type: string
+        - name: endDate
+          in: header
+          description: End Date (Format needs to be :ddmmyyyy)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created
+  /deleteOrder:
+    delete:
+      summary: delete pending order
+      tags:
+        - stockExchange
+      parameters:
+        - name: uniqueOrderId
+          in: header
+          description: pending order id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteRes'
+  '/listAssets':
+    get:
+      summary: To list customer assets
+      tags:
+        - stockExchange
+      parameters:
+        - name: customer
+          in: header
+          description: customer
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+components:
+  schemas:
+    OrderReq:
+      type: object
+      properties:
+        customerID:
+          type: string
+        asset:
+          type: string
+        side:
+          type: string
+        size:
+          type: number
+          format: float
+        price:
+          type: number
+          format: float
+    OrderRes:
+      type: object
+      properties:
+        statusCode:
+          type: string
+        statusMessage:
+          type: string
+        status:
+          type: string
+    DeleteRes:
+      type: object
+      properties:
+        statusCode:
+          type: string
+        statusMessage:
+          type: string
